@@ -6,7 +6,7 @@
 
 #### O repositório contém informações sobre uma integração entre as matérias de Back-End e Banco de Dados com a utilidade de criar um sistema de venda de ingressos para shows🪩
 
-## 🛠 Técnologias Utilizadas
+## 🛠 Tecnologias Utilizadas
 
 #### -⚡ JavaScript
 #### -👩‍💻 Postman

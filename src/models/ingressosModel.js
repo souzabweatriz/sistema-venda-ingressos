@@ -7,7 +7,7 @@ const getIngressos = async () => {
 
 const getIngressobyId = async (id) => {
     const result = await pool.query("SELECT * FROM ingressos WHERE id = $1", [id]);
-    return result.row[0];
+    return result.rows[0];
 };
 
 const createIngresso = async (evento, local, data_evento, categoria, preco, quantidade_disponivel) => {
@@ -18,10 +18,10 @@ const createIngresso = async (evento, local, data_evento, categoria, preco, quan
     return result.rows[0];
 };
 
-const updateIngresso = async (evento, local, data_evento, categoria, preco, quantidade_disponivel) => {
+const updateIngresso = async (id, evento, local, data_evento, categoria, preco, quantidade_disponivel) => {
     const result = await pool.query(
-        "UPDATE ingressos SET evento = $1, local = $2, data_evento = $3, categoria = $4, preco = $5, quatidade_disponivel = $6 RETURNING *",
-        [evento, local, data_evento, categoria, preco, quantidade_disponivel]
+        "UPDATE ingressos SET evento = $1, local = $2, data_evento = $3, categoria = $4, preco = $5, quantidade_disponivel = $6 WHERE id = $7 RETURNING *",
+        [evento, local, data_evento, categoria, preco, quantidade_disponivel, id]
     );
     return result.rows[0];
 };
@@ -34,15 +34,22 @@ const deleteIngresso = async (id) => {
     return { message: "Ingresso deletado com sucesso." };
 };
 
-const vendaIngresso = async (quantidade_disponivel, id) => {
+const vendaIngressos = async (quantidade_disponivel, id) => {
     const idIngresso = await getIngressoById(id);
-    const quantidadeCompra = 1; 
-    if (idIngresso.quantidade_disponivel >= quantidadeCompra) {
+    const quantidadeCompra = req.body; 
+    if (idIngresso.quantidade_disponivel === 0) {
+        return {message: "Os ingressos estão esgotados"};
+    }if (idIngresso >= quantidadeCompra) {
         const novaQuantidade = quantidade_disponivel = idIngresso - quantidadeCompra;
-        const result = await pool.query("UPDATE ingressos SET quantidade_disponivel = $1 WHERE id = $2 RETURNING *", [novaQuantidade, id]);
+        const result = await pool.query(
+            "UPDATE ingressos SET quantidade_disponivel = $1 WHERE id = $2 RETURNING *",
+            [novaQuantidade, id]
+        );
         return result.rows[0];
     } else {
-        return { message: "Não há essa quantidade de ingressos disponíveis" };
+        return { message: "Não há essa quantidade de ingressos disponíveis." };
     }
 };
+
+
 module.exports = { getIngressos, getIngressobyId, createIngresso, updateIngresso, deleteIngresso, vendaIngressos};

@@ -49,16 +49,37 @@ const deleteIngresso  = async (req, res) => {
         res.status(400).json({ message: "Erro ao deletar ingresso." });
     }
 };
+
+
 const vendaIngressos = async (req, res) => {
     try {
-        const { quantidade_disponivel } = req.body;
-        if (!quantidade_disponivel) {
-            return res.status(404).json({ error: "Não foi possível comprar ingresso!" });
+        const { id, quantidade } = req.body;
+        if (!id || !quantidade || quantidade <= 0) {
+            return res.status(404).json({ error: "Não foi possível comprar ingresso, quanridade inválida!" });
         }
-        const venda = await ingressosModel.vendaIngressos(req.params.id,quantidade_disponivel);
-        return res.status(200).json({ message: "Ingresso vendido com sucesso", venda });
+        const ingresso = await ingressosModel.getIngressobyId(req.params.id);
+        
+        if(!ingresso){
+            return res.status(404).json({error: "Ingresso não encontrado"})
+        }
+
+        if(ingresso.quantidade_disponivel < quantidade){
+        return res.status(200).json({ error: "Ingressos insuficientes"});
+        }
+
+        const novaQuantidade = ingresso.quantidade_disponivel - quantidade;
+        await ingressosModel.atualizarQuantidade(id, novaQuantidade);
+
+        res.status(200).json({
+            mensagem: "Compra realizada com sucesso!",
+            evento: ingresso.evento,
+            categoria: ingresso.categoria,
+            quantidade_comprada: quantidade,
+            quantidade_restante: novaQuantidade
+        });
     } catch (error) {
-        return res.status(500).json({ error: "Erro ao vender ingresso" });
+        console.log(error)
+        return res.status(500).json({ error: "Erro ao processar a compra do ingresso" });
     }
 };
 

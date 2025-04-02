@@ -1,6 +1,6 @@
-CREATE DATABASE venda_ingressos;
+CREATE DATABASE vendaingressos;
 
-\c venda_ingressos;
+\c vendaingressos;
 
 CREATE TABLE ingressos(
     id SERIAL PRIMARY KEY,

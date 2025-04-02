@@ -1,9 +1,9 @@
 const pool = require("../config/database");
 
-const getIngressos = async () => {
+const getAllIngressos = async () => {
     const result = await pool.query("SELECT * FROM ingressos");
     return result.rows;
-}
+};
 
 const getIngressobyId = async (id) => {
     const result = await pool.query("SELECT * FROM ingressos WHERE id = $1", [id]);
@@ -41,4 +41,4 @@ const atualizarQuantidade = async (id, quantidade) => {
     return result.rows[0];
 };
 
-module.exports = { getIngressos, getIngressobyId, createIngresso, updateIngresso, deleteIngresso, atualizarQuantidade};
+module.exports = { getAllIngressos, getIngressobyId, createIngresso, updateIngresso, deleteIngresso, atualizarQuantidade};

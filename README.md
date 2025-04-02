@@ -15,9 +15,22 @@
 ## Ao Clonar o projeto 👩‍💻
 
 ### Instale as dependências 🖥️
-
-`npm install express cors dotenv pg`
+```bash
+npm install express cors dotenv pg
+```
 
 ### 📌 Para reiniciar o servidor automaticamente ao salvar alterações, instale o Nodemon:
 
-`npm install nodemon --save-dev`
+```bash
+npm install nodemon --save-dev
+```
+
+### Inicie o Servidor 🚀
+
+```bash
+npm run dev
+```
+
+### Veja a documentação no Postman 🥭
+ 
+ #### https://documenter.getpostman.com/view/37231931/2sB2cREQnV

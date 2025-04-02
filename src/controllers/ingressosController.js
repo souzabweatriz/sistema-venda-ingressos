@@ -1,13 +1,14 @@
-const ingressosModel = require("../models/ingressosModel");
+const ingressosModel = require("../models/ingressosModel")
 
 const getAllIngressos = async (req, res) =>{
     try {
-        const ingressos = await ingressosModel.getIngressos();
+        const ingressos = await ingressosModel.getAllIngressos();
         res.status(200).json(ingressos)
     } catch (error) {
         res.status(404).json({message: "Erro ao buscar ingressos"});
     }
 };
+
 const createIngresso = async (req, res) => {
     try {
         const { evento, local, data_evento, categoria, preco, quantidade_disponivel } = req.body;
@@ -57,7 +58,7 @@ const vendaIngressos = async (req, res) => {
         if (!id || !quantidade || quantidade <= 0) {
             return res.status(404).json({ error: "Não foi possível comprar ingresso, quanridade inválida!" });
         }
-        const ingresso = await ingressosModel.getIngressobyId(req.params.id);
+        const ingresso = await ingressosModel.getIngressobyId(id);
         
         if(!ingresso){
             return res.status(404).json({error: "Ingresso não encontrado"})

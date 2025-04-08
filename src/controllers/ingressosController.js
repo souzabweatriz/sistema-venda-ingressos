@@ -2,7 +2,8 @@ const ingressosModel = require("../models/ingressosModel")
 
 const getAllIngressos = async (req, res) =>{
     try {
-        const ingressos = await ingressosModel.getAllIngressos();
+        const { local } = req.query
+        const ingressos = await ingressosModel.getAllIngressos(local);
         res.status(200).json(ingressos)
     } catch (error) {
         res.status(404).json({message: "Erro ao buscar ingressos"});
